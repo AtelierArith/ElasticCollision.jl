@@ -24,7 +24,7 @@ function setup_particle(sys::CollisionSystem)
     num_particles = sys.num_particles
     while length(particles) != num_particles
         θ = 2π * rand()
-        v_abs = 0.08
+        v_abs = 0.1
         v = Velocity2D(v_abs * cos(θ), v_abs * sin(θ))
         m = r = rand(Uniform(0.1, 0.3))
         x = rand(Uniform(sys.xmin + r, sys.xmax - r))
@@ -99,12 +99,9 @@ function create_animation(sys::CollisionSystem)
                     m2 = particle2.m
 
                     # correct position so that c1 and c2 does not contact
-                    for _ in 0:0.005:1
-                        c1.pt .-= 0.005 .* v1
-                        c2.pt .-= 0.005 .* v2
-                        if !has_contact(c1, c2)
-                            break
-                        end
+                    while has_contact(c1, c2)
+                        c1.pt .-= 0.015 .* v1
+                        c2.pt .-= 0.015 .* v2
                     end
 
                     # update velocity
