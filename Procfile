@@ -1,1 +1,1 @@
-web: GENIE_ENV=prod ./bin/server $PORT
+web: JULIA_LOAD_PATH="./lib:$JULIA_LOAD_PATH" GENIE_ENV=prod ./bin/server $PORT
