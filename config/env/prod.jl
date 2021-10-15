@@ -1,3 +1,5 @@
+using Pkg
+
 using Genie.Configuration, Logging
 
 const config = Settings(
@@ -20,5 +22,6 @@ ENV["JULIA_REVISE"] = "off"
 ENV["GKSwstype"] = "100"
 
 if !isdir(joinpath(@__FILE__, "../../lib/src"))
-  run(`git submodule update --remote`)
+  @info "Adding Nora Packages"
+  Pkg.add(url="https://github.com/AtelierArith/GeometryObjects.jl.git")
 end
