@@ -2,6 +2,8 @@
 
 - Genie app utilize [GeometryObjects.jl](https://github.com/AtelierArith/GeometryObjects.jl)
 
+![](readme_assets/demo.gif)
+
 # Usage
 
 ## Prerequisite
