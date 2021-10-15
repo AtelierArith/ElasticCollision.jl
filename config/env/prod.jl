@@ -18,3 +18,7 @@ end
 
 ENV["JULIA_REVISE"] = "off"
 ENV["GKSwstype"] = "100"
+
+if !isdir(joinpath(@__FILE__, "../../lib/src"))
+  run(`git submodule update --remote`)
+end
