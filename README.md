@@ -1,6 +1,6 @@
 # ElasticCollision.jl
 
-- Genie app for GeometryObjects.jl
+- Genie app utilize [GeometryObjects.jl](https://github.com/AtelierArith/GeometryObjects.jl)
 
 # Usage
 
@@ -32,4 +32,4 @@ then open your web browser and go to `http://localhost:8000/`
 
 ### Tips
 
-You can adjust the number of particles and the length of gif via `http://localhost:8000/?maxT=300&num_particles=60`
+You can adjust the number of particles and the length of time gif via `http://localhost:8000/?maxT=300&num_particles=60`
