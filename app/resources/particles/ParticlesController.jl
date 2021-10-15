@@ -132,9 +132,10 @@ function create_animation(sys::CollisionSystem)
     return anim
 end
 
-function rendergif()
+function rendergif(;kwargs...)
+    @info kwargs
     buff = IOBuffer()
-    sys = CollisionSystem()
+    sys = CollisionSystem(;kwargs...)
     anim = create_animation(sys)
     show(buff, MIME("text/html"), gif(anim))
     html(:particles, :plot, source=String(take!(buff)))
