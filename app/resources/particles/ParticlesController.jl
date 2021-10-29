@@ -48,8 +48,8 @@ function setup_particle(sys::CollisionSystem)
     return particles
 end
 
-function move!(sys::CollisionSystem, pt::Point2D, v::Velocity2D, r::Real=0)
-    pt .+= v # do not use `pt += v`
+function move!(sys::CollisionSystem, pt::Point2D, v::Velocity2D, r::Real=0, Δt=1.)
+    pt .+= Δt .* v # do not use `pt += v`
     if pt.y  ≥ sys.ymax - r
         pt.y = 2(sys.ymax - r) - pt.y
         v.y = -v.y
@@ -70,7 +70,7 @@ function move!(sys::CollisionSystem, pt::Point2D, v::Velocity2D, r::Real=0)
     return pt, v
 end
 
-move!(sys::CollisionSystem, p::Particle2D) = move!(sys, p.c.pt, p.v, p.c.r)
+move!(sys::CollisionSystem, p::Particle2D; Δt=1.) = move!(sys, p.c.pt, p.v, p.c.r, Δt)
 
 dist(pt1, pt2) = sqrt((pt1.x - pt2.x)^2 + (pt1.y - pt2.y)^2)
 has_contact(c1::Circle2D, c2::Circle2D) = c1.r + c2.r ≥ dist(c1.pt, c2.pt)
@@ -78,9 +78,19 @@ has_contact(p1::Particle2D, p2::Particle2D) = has_contact(p1.c, p2.c)
 
 function create_animation(sys::CollisionSystem)
     particles = setup_particle(sys)
-
-    anim = @animate for t in 1:sys.maxT
-        move!.(Ref(sys), particles)
+    Δt = 0.1
+    accumΔt = 0.0
+    cnt = 0
+    plt = [plot(
+        size=(400, 300),
+        xlim=(sys.xmin, sys.xmax), ylim=(sys.ymin, sys.ymax),
+        aspect_ratio=:equal, legend=false,
+        grid=false, ticks=false,
+        framestyle=:box,
+    )]
+    while cnt < sys.maxT
+        accumΔt += Δt
+        move!.(Ref(sys), particles; Δt)
         # naive collision algorithm
         for i in 1:length(particles)
             for j in (i + 1):length(particles)
@@ -114,18 +124,24 @@ function create_animation(sys::CollisionSystem)
             end
         end
 
-        s = plot(
-            size=(400, 300),
-            xlim=(sys.xmin, sys.xmax), ylim=(sys.ymin, sys.ymax),
-            aspect_ratio=:equal, legend=false,
-            grid=false, ticks=false,
-            framestyle=:box,
-        )
-
-        plot!(s, particles)
-        plot!(s, title="$t")
+        if accumΔt ≥ 1.
+            cnt += 1
+            s = plot(
+                size=(400, 300),
+                xlim=(sys.xmin, sys.xmax), ylim=(sys.ymin, sys.ymax),
+                aspect_ratio=:equal, legend=false,
+                grid=false, ticks=false,
+                framestyle=:box,
+            )
+            plot!(s, particles)
+            plot!(s, title="$cnt")
+            accumΔt = zero(accumΔt)
+            push!(plt, s)
+        end
     end
-
+    anim = @animate for p in plt[2:end]
+        plot(p)
+    end
     return anim
 end
 
