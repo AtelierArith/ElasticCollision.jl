@@ -27,6 +27,7 @@ $ julia --project=@. -e 'using Pkg; Pkg.instantiate()'
 
 ```
 $ cd /path/to/ElasticCollision.jl
+$ julia --project=@. -e 'using Pkg; Pkg.instantiate()'
 $ ./bin/server
 ```
 
