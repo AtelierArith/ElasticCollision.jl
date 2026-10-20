@@ -1,6 +1,6 @@
 using Genie.Configuration, Logging
 
-const config = Settings(
+Genie.Configuration.config!(
   # GeometryObjects is a package dependency, not an autoloaded app library.
   path_lib                        = joinpath("app", "lib"),
   server_port                     = 8000,
@@ -13,7 +13,7 @@ const config = Settings(
   format_html_output              = false
 )
 
-if config.server_handle_static_files
+if Genie.config.server_handle_static_files
   @warn("For performance reasons Genie should not serve static files (.css, .js, .jpg, .png, etc) in production.
          It is recommended to set up Apache or Nginx as a reverse proxy and cache to serve static assets.")
 end

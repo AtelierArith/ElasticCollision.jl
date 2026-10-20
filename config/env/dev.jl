@@ -1,6 +1,6 @@
 using Genie.Configuration, Logging
 
-const config = Settings(
+Genie.Configuration.config!(
   # GeometryObjects is a package dependency, not an autoloaded app library.
   path_lib                        = joinpath("app", "lib"),
   server_port                     = 8000,
