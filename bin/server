@@ -1,2 +1,5 @@
 #!/bin/sh
-julia --color=yes --depwarn=no --project=@. -q -i -- $(dirname $0)/../bootstrap.jl s "$@"
+set -eu
+APP_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+cd "$APP_ROOT"
+exec julia --color=yes --depwarn=no --project="$APP_ROOT" -q -i -- "$APP_ROOT/bootstrap.jl" -s=true "$@"
