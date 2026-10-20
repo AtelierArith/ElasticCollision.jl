@@ -1,7 +1,7 @@
 using Genie.Router
 using Plots
 
-using ParticlesController
+using .ParticlesController
 
 route("/") do
     maxT = min(1000, parse(Int, params(:maxT, "100")))
