@@ -1,0 +1,31 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  server:
+    name: Server / Julia ${{ matrix.julia }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        julia: ['1.10', 'lts', '1']
+    env:
+      GKSwstype: '100'
+      JULIA_NUM_PRECOMPILE_TASKS: '2'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - uses: julia-actions/setup-julia@v3
+        with:
+          version: ${{ matrix.julia }}
+      - uses: julia-actions/cache@v3
+      - name: Set up app and its pinned GeometryObjects submodule
+        run: julia --project=. setup.jl
+      - name: Test server startup and GIF response
+        run: python3 test/server_smoke.py

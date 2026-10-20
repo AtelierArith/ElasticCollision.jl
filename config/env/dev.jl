@@ -1,6 +1,8 @@
 using Genie.Configuration, Logging
 
 const config = Settings(
+  # GeometryObjects is a package dependency, not an autoloaded app library.
+  path_lib                        = joinpath("app", "lib"),
   server_port                     = 8000,
   server_host                     = "127.0.0.1",
   log_level                       = Logging.Info,
